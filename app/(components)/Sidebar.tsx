@@ -6,10 +6,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dancing_Script } from "next/font/google";
 
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+
 const appTitleFont = Dancing_Script({ subsets: ["latin"] });
 
 const Sidebar = () => {
-  const currentPath = usePathname();
+  const currentPath: string = usePathname();
+  const { data: session } = useSession();
   return (
     <>
       <div className="block md:hidden fixed top-0 w-full bg-background border-b-[1px] py-1 px-3">
@@ -38,7 +42,7 @@ const Sidebar = () => {
               className={`${currentPath === "/create" ? "stroke-1" : ""}`}
             />
           </Link>
-          <Link href={"/"}>
+          <Link href={"/profile"}>
             <CiUser size={30} className="stroke-[0.3px]" />
           </Link>
         </div>
@@ -93,10 +97,26 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="p-6 absolute bottom-0">
-          <Link href={"/"} className="text-lg flex items-start gap-3">
-            <CiUser size={26} className="stroke-[0.3px]" />
-            Profile
-          </Link>
+          {session ? (
+            <Link href={"/profile"} className="text-lg flex items-center gap-2">
+              <Image
+                src={session?.user?.image as string}
+                alt="user-img"
+                width={36}
+                height={36}
+                className="rounded-lg"
+              />
+              <div>
+                <h1 className="text-md">{session.user?.name}</h1>
+                <p className="text-xs">{session.user?.email}</p>
+              </div>
+            </Link>
+          ) : (
+            <Link href={"/signIn"} className="text-lg flex items-start gap-3">
+              <CiUser size={26} className="stroke-[0.3px]" />
+              Profile
+            </Link>
+          )}
         </div>
       </div>
     </>
