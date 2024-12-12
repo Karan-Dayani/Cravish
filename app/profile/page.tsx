@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { getCurrUser } from "../api/api";
-// import { getUserByMail } from "../api/api";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { IoIosLogOut } from "react-icons/io";
@@ -39,16 +38,8 @@ export default function Profile() {
       }
     };
 
-    // const fetchUserByEmail = async () => {
-    //   const response = await getUserByMail(session?.user?.email as string);
-    //   if (response) {
-    //     console.log(response);
-    //   }
-    // };
-
     if (session) {
       fetchUser();
-      // fetchUserByEmail();
     }
   }, [session]);
 

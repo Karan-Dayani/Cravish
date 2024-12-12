@@ -1,23 +1,33 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-// interface User {
-//   name: string;
-//   email: string;
-//   image: string;
-// }
 
-// interface SuccessUserGet {
-//   success: {
-//     user: User;
-//   };
-// }
+interface User {
+  name: string;
+  email: string;
+  image: string;
+}
 
-// interface ErrorUserGet {
-//   error: string;
-// }
+interface SuccessUserGet {
+  success: {
+    user: User;
+  };
+}
 
-// type CurrUserResponse = SuccessUserGet | ErrorUserGet;
+interface UserId {
+  _id: string;
+}
 
-export const getCurrUser = async () => {
+interface recipe {
+  userId: string | undefined;
+  title: string;
+  img: string;
+  ingredients: string[];
+  procedure: string[];
+  likes: number;
+}
+
+export const getCurrUser = async (): Promise<
+  SuccessUserGet | { error: string } | null
+> => {
   try {
     const res: Response = await fetch(`${baseUrl}/api/getUser`, {
       cache: "no-store",
@@ -32,7 +42,9 @@ export const getCurrUser = async () => {
   }
 };
 
-export const getUserByMail = async (email: string) => {
+export const getUserIdByMail = async (
+  email: string
+): Promise<UserId | null> => {
   try {
     const res = await fetch(`${baseUrl}/api/User/${email}`, {
       cache: "no-store",
@@ -46,5 +58,26 @@ export const getUserByMail = async (email: string) => {
   } catch (error) {
     console.error("Failed to get User", error);
     return null;
+  }
+};
+
+export const createRecipe = async (data: recipe): Promise<void> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to create recipe");
+    }
+
+    console.log("Recipe created successfully");
+  } catch (error) {
+    console.error("Failed to create recipe", error);
+    throw error;
   }
 };

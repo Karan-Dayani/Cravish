@@ -16,12 +16,12 @@ const Sidebar = () => {
   const { data: session } = useSession();
   return (
     <>
-      <div className="block md:hidden fixed top-0 w-full bg-background border-b-[1px] py-1 px-3">
+      <div className="block md:hidden fixed z-50 top-0 w-full bg-background border-b-[1px] py-1 px-3">
         <h1 className={`text-4xl font-extrabold ${appTitleFont.className}`}>
           Cravish
         </h1>
       </div>
-      <div className="block md:hidden fixed bottom-0 w-full bg-background border-t-[1px] py-3 px-10">
+      <div className="block md:hidden fixed x-50 bottom-0 w-full bg-background border-t-[1px] py-3 px-10">
         <div className="flex justify-between">
           <Link href={"/"}>
             {currentPath === "/" ? (
