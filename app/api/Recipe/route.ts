@@ -29,3 +29,15 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET(req: Request) {
+  const { search } = Object.fromEntries(new URL(req.url).searchParams);
+  try {
+    const response = await Recipe.find({
+      title: { $regex: search, $options: "i" },
+    });
+    return NextResponse.json(response, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: error }, { status: 500 });
+  }
+}
