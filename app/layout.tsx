@@ -34,7 +34,9 @@ export default function RootLayout({
           <div className="relative">
             <Sidebar />
           </div>
-          <div className="my-12 md:my-0 md:ml-56 w-full h-full">{children}</div>
+          <div className="mt-12 mb-14 md:my-0 md:ml-56 w-full h-full">
+            {children}
+          </div>
         </body>
       </html>
     </SessionWrapper>

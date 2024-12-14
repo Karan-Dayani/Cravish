@@ -21,7 +21,7 @@ const Sidebar = () => {
           Cravish
         </h1>
       </div>
-      <div className="block md:hidden fixed x-50 bottom-0 w-full bg-background border-t-[1px] py-3 px-10">
+      <div className="block md:hidden fixed z-50 bottom-0 w-full bg-background border-t-[1px] py-3 px-10">
         <div className="flex justify-between">
           <Link href={"/"}>
             {currentPath === "/" ? (

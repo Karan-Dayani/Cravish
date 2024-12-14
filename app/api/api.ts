@@ -1,5 +1,18 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+export interface Recipe {
+  _id: string;
+  userId: string;
+  title: string;
+  img: string;
+  ingredients: string[];
+  procedure: string[];
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 interface User {
   name: string;
   email: string;
@@ -79,5 +92,26 @@ export const createRecipe = async (data: recipe): Promise<void> => {
   } catch (error) {
     console.error("Failed to create recipe", error);
     throw error;
+  }
+};
+
+export const getUsersRecipes = async (
+  userId: string
+): Promise<Recipe[] | null> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe/${userId}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch Recipes: ${res.status} ${res.statusText}`
+      );
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to get Recipes", error);
+    return null;
   }
 };
