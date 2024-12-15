@@ -31,13 +31,34 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const { search } = Object.fromEntries(new URL(req.url).searchParams);
+  const { searchParams } = new URL(req.url);
+  const search = searchParams.get("search");
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "10", 10);
+
+  if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+    return NextResponse.json(
+      { message: "Invalid pagination parameters" },
+      { status: 400 }
+    );
+  }
+
   try {
-    const response = await Recipe.find({
-      title: { $regex: search, $options: "i" },
-    });
+    let response;
+
+    if (search) {
+      response = await Recipe.find({
+        title: { $regex: search, $options: "i" },
+      });
+    } else {
+      response = await Recipe.aggregate([
+        { $sample: { size: limit } }, // Shuffle recipes
+      ]);
+    }
+
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
+    console.error("Error fetching recipes:", error);
     return NextResponse.json({ message: error }, { status: 500 });
   }
 }

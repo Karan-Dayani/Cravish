@@ -164,3 +164,24 @@ export const getUserById = async (id: string): Promise<User> => {
     throw error;
   }
 };
+
+export const getShuffeledRecipe = async (
+  size: number
+): Promise<Recipe[] | null> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe?size=${size}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch Recipes: ${res.status} ${res.statusText}`
+      );
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to get Recipes", error);
+    return null;
+  }
+};
