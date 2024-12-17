@@ -10,6 +10,7 @@ const InterFont = Inter({ subsets: ["latin"], weight: "400" });
 
 function ResultItem({ item }: { item: Recipe }) {
   const [creator, setCreator] = useState<User>();
+  const [liked, setLiked] = useState<boolean>();
   useLayoutEffect(() => {
     const getCreator = async () => {
       const res = await getUserById(item.userId);
@@ -32,26 +33,35 @@ function ResultItem({ item }: { item: Recipe }) {
           )}
           <h1 className="text-sm font-bold">{creator?.username}</h1>
         </div>
-        <Link href={"#"} className="text-blue-400 hover:text-blue-500">
+        <Link
+          href={`/recipe/${item._id}`}
+          className="text-blue-400 hover:text-blue-500"
+        >
           Get Recipe...
         </Link>
       </div>
-      <div>
+      <button
+        className="w-full"
+        onDoubleClick={() => setLiked((prev) => !prev)}
+      >
         <Image
           priority={true}
           src={item.img}
           alt={item.title}
-          width={400}
-          height={400}
+          width={1000}
+          height={1000}
           quality={100}
           className="w-full"
         />
-      </div>
+      </button>
       <div className="flex items-center justify-between py-2 px-2 md:px-0">
         <h1 className="text-lg font-bold">{item.title}</h1>
-        <div className="flex items-center gap-2 text-lg">
-          <h1>{item.likes}</h1>
-          <LuHeart className="size-5" />
+        <div className="flex items-center gap-2 text-2xl text-red-500">
+          {item.likes >= 1 && <h1 className="text-xl">{item.likes}</h1>}
+          <LuHeart
+            onClick={() => setLiked((prev) => !prev)}
+            className={`${liked && "fill-red-500"}`}
+          />
         </div>
       </div>
       <hr />
@@ -116,7 +126,14 @@ export default function Home() {
           ))}
         </div>
       </div>
-      {loading && <p className="text-center mt-4">Loading...</p>}
+      {loading && (
+        <div className="flex justify-center w-full p-8">
+          <div
+            className="loader border-t-2 rounded-full border-gray-500 bg-gray-300 animate-spin
+          aspect-square w-6 flex justify-center items-center text-yellow-700"
+          ></div>
+        </div>
+      )}
       {!hasMore && <p className="text-center mt-4">No more recipes to load.</p>}
     </div>
   );

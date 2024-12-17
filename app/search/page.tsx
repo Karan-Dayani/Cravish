@@ -33,7 +33,7 @@ function ResultItem({ item }: { item: Recipe }) {
         </div>
       </div>
       <div className="absolute right-3 bottom-2">
-        <div className="p-2 flex items-center gap-1 text-lg">
+        <div className="p-2 flex items-center gap-1 text-lg text-red-500">
           <LuHeart /> {item.likes}
         </div>
       </div>

@@ -64,6 +64,7 @@ function Posts({ userId }: { userId: string }) {
               <div key={i} className="relative group">
                 <div className="group-hover:brightness-75">
                   <Image
+                    priority={true}
                     src={item.img}
                     alt="res-img"
                     width={150}

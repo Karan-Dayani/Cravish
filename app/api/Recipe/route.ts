@@ -35,6 +35,7 @@ export async function GET(req: Request) {
   const search = searchParams.get("search");
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const userId = searchParams.get("userId");
 
   if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
     return NextResponse.json(
@@ -50,10 +51,10 @@ export async function GET(req: Request) {
       response = await Recipe.find({
         title: { $regex: search, $options: "i" },
       });
+    } else if (userId) {
+      response = await Recipe.find({ userId: userId });
     } else {
-      response = await Recipe.aggregate([
-        { $sample: { size: limit } }, // Shuffle recipes
-      ]);
+      response = await Recipe.aggregate([{ $sample: { size: limit } }]);
     }
 
     return NextResponse.json(response, { status: 200 });

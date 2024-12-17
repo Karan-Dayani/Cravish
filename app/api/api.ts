@@ -110,7 +110,7 @@ export const getUsersRecipes = async (
   userId: string
 ): Promise<Recipe[] | null> => {
   try {
-    const res = await fetch(`${baseUrl}/api/Recipe/${userId}`, {
+    const res = await fetch(`${baseUrl}/api/Recipe?userId=${userId}`, {
       cache: "no-store",
     });
 
@@ -170,6 +170,25 @@ export const getShuffeledRecipe = async (
 ): Promise<Recipe[] | null> => {
   try {
     const res = await fetch(`${baseUrl}/api/Recipe?size=${size}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch Recipes: ${res.status} ${res.statusText}`
+      );
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to get Recipes", error);
+    return null;
+  }
+};
+
+export const getRecipeById = async (id: string): Promise<Recipe | null> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe/${id}`, {
       cache: "no-store",
     });
 
