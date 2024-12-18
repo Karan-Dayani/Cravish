@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getUserById, Recipe, User } from "./api/api";
+import { getUserById } from "./api/api";
+import { Recipe, User } from "./interfaces";
 import { LuHeart } from "react-icons/lu";
 import Link from "next/link";
 import { Inter } from "next/font/google";

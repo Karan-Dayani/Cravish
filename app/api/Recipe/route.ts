@@ -1,4 +1,5 @@
 import Recipe from "@/app/(models)/recipe";
+import { error, Recipe as recipeType } from "@/app/interfaces";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -30,7 +31,9 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(
+  req: Request
+): Promise<NextResponse<recipeType[] | error>> {
   const { searchParams } = new URL(req.url);
   const search = searchParams.get("search");
   const page = parseInt(searchParams.get("page") || "1", 10);

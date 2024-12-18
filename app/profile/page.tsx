@@ -5,7 +5,8 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import { IoIosLogOut } from "react-icons/io";
 import { redirect } from "next/navigation";
-import { getUserIdByMail, getUsersRecipes, Recipe } from "../api/api";
+import { getUserIdByMail, getUsersRecipes } from "../api/api";
+import { Recipe } from "../interfaces";
 import FlatList from "flatlist-react/lib";
 import { LuHeart } from "react-icons/lu";
 

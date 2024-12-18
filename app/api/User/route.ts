@@ -1,8 +1,11 @@
 import User from "@/app/(models)/user";
 import { NextResponse } from "next/server";
 import { Types } from "mongoose";
+import { error, User as userType } from "@/app/interfaces";
 
-export async function GET(req: Request) {
+export async function GET(
+  req: Request
+): Promise<NextResponse<userType | error>> {
   try {
     const { id } = Object.fromEntries(new URL(req.url).searchParams);
 

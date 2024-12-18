@@ -1,53 +1,6 @@
+import { Recipe, recipe, User, UserId } from "../interfaces";
+
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export interface Recipe {
-  _id: string;
-  userId: string;
-  title: string;
-  img: string;
-  ingredients: string[];
-  procedure: string[];
-  likes: number;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-export interface User {
-  _id: string;
-  username: string;
-  image: string;
-  email: string;
-  liked: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-// interface User {
-//   name: string;
-//   email: string;
-//   image: string;
-// }
-
-// interface SuccessUserGet {
-//   success: {
-//     user: User;
-//   };
-// }
-
-interface UserId {
-  _id: string;
-}
-
-interface recipe {
-  userId: string | undefined;
-  title: string;
-  img: string;
-  ingredients: string[];
-  procedure: string[];
-  likes: number;
-}
 
 // export const getCurrUser = async (): Promise<
 //   SuccessUserGet | { error: string } | null

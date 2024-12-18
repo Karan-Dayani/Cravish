@@ -1,7 +1,8 @@
 "use client";
 import React, { useLayoutEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
-import { getRecipesBySearch, Recipe, getUserById, User } from "../api/api";
+import { getRecipesBySearch, getUserById } from "../api/api";
+import { Recipe, User } from "../interfaces";
 import FlatList from "flatlist-react/lib";
 import Image from "next/image";
 import { LuHeart } from "react-icons/lu";

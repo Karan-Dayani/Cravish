@@ -1,5 +1,6 @@
 "use client";
-import { getRecipeById, getUserById, Recipe, User } from "@/app/api/api";
+import { getRecipeById, getUserById } from "@/app/api/api";
+import { Recipe, User } from "@/app/interfaces";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useParams } from "next/navigation";

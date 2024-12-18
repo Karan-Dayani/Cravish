@@ -9,6 +9,7 @@ import Image from "next/image";
 import { AiOutlineClose, AiOutlineMinus } from "react-icons/ai";
 import { GoPlus } from "react-icons/go";
 import { createRecipe } from "../api/api";
+import { recipe } from "../interfaces";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -62,7 +63,7 @@ export default function Create() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newRecipe = {
+    const newRecipe: recipe = {
       userId: userId,
       title,
       img,
