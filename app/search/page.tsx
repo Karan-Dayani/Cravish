@@ -6,6 +6,7 @@ import { Recipe, User } from "../interfaces";
 import FlatList from "flatlist-react/lib";
 import Image from "next/image";
 import { LuHeart } from "react-icons/lu";
+import Link from "next/link";
 
 function ResultItem({ item }: { item: Recipe }) {
   const [creator, setCreator] = useState<User>();
@@ -17,7 +18,10 @@ function ResultItem({ item }: { item: Recipe }) {
     getCreator();
   }, [item]);
   return (
-    <div className="bg-slate-200 rounded-md flex justify-between items-center relative">
+    <Link
+      href={`/recipe/${item?._id}`}
+      className="bg-slate-200 rounded-md flex justify-between items-center relative"
+    >
       <div className="flex">
         <div className="p-2 md:p-4">
           <Image
@@ -38,7 +42,7 @@ function ResultItem({ item }: { item: Recipe }) {
           <LuHeart /> {item.likes}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

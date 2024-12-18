@@ -14,7 +14,7 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState<Recipe>();
   const [creator, setCreator] = useState<User>();
   const [liked, setLiked] = useState<boolean>();
-  const [loading, setloading] = useState<boolean>();
+  const [loading, setloading] = useState<boolean>(true);
   useEffect(() => {
     const getRecipe = async () => {
       setloading(true);
