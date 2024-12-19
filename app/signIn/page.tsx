@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import { useAppContext } from "../context";
 
 export default function SignIn() {
-  const { data: session, status } = useSession();
+  const { user, status } = useAppContext();
 
   if (status === "loading") {
     return (
@@ -13,10 +14,10 @@ export default function SignIn() {
     );
   }
 
-  if (session) {
+  if (status === "authenticated") {
     return (
       <div className="p-10">
-        <h1>hii! you are logged in as {session?.user?.name}</h1>
+        <h1>hii! you are logged in as {user?.username}</h1>
         <h1>
           Check out your profile{" "}
           <a

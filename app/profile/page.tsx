@@ -1,14 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { IoIosLogOut } from "react-icons/io";
 import { redirect } from "next/navigation";
-import { getUserIdByMail, getUsersRecipes } from "../api/api";
+import { getUsersRecipes } from "../api/api";
 import { Recipe } from "../interfaces";
 import FlatList from "flatlist-react/lib";
 import { LuHeart } from "react-icons/lu";
+import { useAppContext } from "../context";
 
 const InterFont = Inter({ subsets: ["latin"], weight: "400" });
 
@@ -98,8 +99,7 @@ function LikedRecipes() {
 }
 
 export default function Profile() {
-  const { data: session, status } = useSession();
-  const [userId, setUserId] = useState<string>();
+  const { user, status } = useAppContext();
   const [activeTab, setActiveTab] = useState<string>("posts");
 
   useEffect(() => {
@@ -108,21 +108,13 @@ export default function Profile() {
     }
   }, [status]);
 
-  useEffect(() => {
-    const getUserId = async () => {
-      const res = await getUserIdByMail(session?.user?.email as string);
-      setUserId(res?._id);
-    };
-    if (session) {
-      getUserId();
-    }
-  }, [session]);
-
   if (status === "loading") {
-    // While the session is being resolved, show a loading state
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+      <div className="flex justify-center w-full p-8">
+        <div
+          className="loader border-t-2 rounded-full border-gray-500 bg-gray-300 animate-spin
+        aspect-square w-6 flex justify-center items-center text-yellow-700"
+        ></div>
       </div>
     );
   }
@@ -130,7 +122,7 @@ export default function Profile() {
   const renderActiveTab = () => {
     switch (activeTab) {
       case "posts":
-        return <Posts userId={userId || ""} />;
+        return <Posts userId={user?._id || ""} />;
       case "liked":
         return <LikedRecipes />;
       default:
@@ -142,9 +134,9 @@ export default function Profile() {
     <div className="pt-10 md:px-10">
       <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-3 lg:gap-0">
         <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 items-center lg:items-start">
-          {session?.user?.image ? (
+          {user?.image ? (
             <Image
-              src={session?.user?.image as string}
+              src={user?.image as string}
               alt="user-img"
               height={150}
               width={150}
@@ -157,10 +149,10 @@ export default function Profile() {
 
           <div className="flex flex-col items-center lg:items-start gap-0 lg:gap-2">
             <h1 className={`text-2xl lg:text-4xl ${InterFont.className}`}>
-              {session?.user?.name}
+              {user?.username}
             </h1>
             <h1 className={`text-sm lg:text-md ${InterFont.className}`}>
-              {session?.user?.email}
+              {user?.email}
             </h1>
           </div>
         </div>

@@ -39,6 +39,12 @@ export interface error {
   message: string | unknown;
 }
 
+export interface AppContextProps {
+  user: User | undefined;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  status: string;
+}
+
 // interface User {
 //   name: string;
 //   email: string;

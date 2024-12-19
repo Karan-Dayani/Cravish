@@ -6,14 +6,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dancing_Script } from "next/font/google";
 
-import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useAppContext } from "../context";
 
 const appTitleFont = Dancing_Script({ subsets: ["latin"] });
 
 const Sidebar = () => {
   const currentPath: string = usePathname();
-  const { data: session } = useSession();
+  const { user } = useAppContext();
   return (
     <>
       <div className="block md:hidden fixed z-50 top-0 w-full bg-background border-b-[1px] py-1 px-3">
@@ -97,18 +97,18 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="p-6 absolute bottom-0">
-          {session ? (
+          {user ? (
             <Link href={"/profile"} className="text-lg flex items-center gap-2">
               <Image
-                src={session?.user?.image as string}
+                src={user?.image as string}
                 alt="user-img"
                 width={36}
                 height={36}
                 className="rounded-lg"
               />
               <div>
-                <h1 className="text-md">{session.user?.name}</h1>
-                <p className="text-xs">{session.user?.email}</p>
+                <h1 className="text-md">{user?.username}</h1>
+                <p className="text-xs">{user?.email}</p>
               </div>
             </Link>
           ) : (

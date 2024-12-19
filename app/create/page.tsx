@@ -1,8 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { redirect, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { getUserIdByMail } from "../api/api";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 import Image from "next/image";
@@ -10,6 +8,7 @@ import { AiOutlineClose, AiOutlineMinus } from "react-icons/ai";
 import { GoPlus } from "react-icons/go";
 import { createRecipe } from "../api/api";
 import { recipe } from "../interfaces";
+import { useAppContext } from "../context";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -27,22 +26,11 @@ export default function Create() {
   } else {
     firebase.app();
   }
-  const { data: session, status } = useSession();
-  const [userId, setUserID] = useState<string>();
+  const { user, status } = useAppContext();
   const [title, setTitle] = useState<string>("");
   const [img, setImg] = useState<string>("");
   const [ingredients, setIngredients] = useState<string[]>([""]);
   const [procedure, setProcedure] = useState<string[]>([""]);
-
-  useEffect(() => {
-    const getUserId = async () => {
-      const res = await getUserIdByMail(session?.user?.email as string);
-      setUserID(res?._id);
-    };
-    if (session) {
-      getUserId();
-    }
-  }, [session]);
 
   const handleAddField = (field: string) => {
     if (field === "ingredient") {
@@ -64,7 +52,7 @@ export default function Create() {
     e.preventDefault();
 
     const newRecipe: recipe = {
-      userId: userId,
+      userId: user?._id,
       title,
       img,
       ingredients,
@@ -83,8 +71,11 @@ export default function Create() {
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+      <div className="flex justify-center w-full p-8">
+        <div
+          className="loader border-t-2 rounded-full border-gray-500 bg-gray-300 animate-spin
+        aspect-square w-6 flex justify-center items-center text-yellow-700"
+        ></div>
       </div>
     );
   }
@@ -166,15 +157,7 @@ export default function Create() {
                 </div>
               </>
             )}
-            {img && (
-              <Image
-                src={img}
-                height={400}
-                width={400}
-                alt="image"
-                className=""
-              />
-            )}
+            {img && <Image src={img} height={400} width={400} alt="image" />}
           </div>
         </div>
         <div className="pt-3">
