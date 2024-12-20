@@ -157,3 +157,69 @@ export const getRecipeById = async (id: string): Promise<Recipe | null> => {
     return null;
   }
 };
+
+export const likeRecipe = async (id: string): Promise<void> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, operation: "like" }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to like recipe");
+    }
+
+    console.log("Recipe liked successfully");
+  } catch (error) {
+    console.error("Failed to like recipe", error);
+    throw error;
+  }
+};
+
+export const unlikeRecipe = async (id: string): Promise<void> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Recipe/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, operation: "unlike" }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to unlike recipe");
+    }
+
+    console.log("Recipe unliked successfully");
+  } catch (error) {
+    console.error("Failed to unlike recipe", error);
+    throw error;
+  }
+};
+
+export const updateUsersLiked = async (
+  id: string,
+  liked: string[]
+): Promise<void> => {
+  try {
+    const res = await fetch(`${baseUrl}/api/User`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, liked }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to update user liked");
+    }
+
+    console.log("User liked updated successfully");
+  } catch (error) {
+    console.error("Failed to update user liked", error);
+    throw error;
+  }
+};

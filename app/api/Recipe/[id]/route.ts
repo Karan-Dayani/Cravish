@@ -13,3 +13,24 @@ export async function GET(
     return NextResponse.json({ message: error }, { status: 500 });
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+    if (data.operation === "like") {
+      await Recipe.findOneAndUpdate({ _id: data.id }, { $inc: { likes: 1 } });
+    } else if (data.operation === "unlike") {
+      await Recipe.findOneAndUpdate({ _id: data.id }, { $inc: { likes: -1 } });
+    }
+    return NextResponse.json(
+      { message: "Successfully Updated recipe" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Failed to perform operation", error);
+    return NextResponse.json(
+      { message: "Failed to perform operation" },
+      { status: 500 }
+    );
+  }
+}

@@ -43,6 +43,7 @@ export interface AppContextProps {
   user: User | undefined;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   status: string;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // interface User {

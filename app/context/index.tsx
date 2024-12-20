@@ -8,6 +8,7 @@ const AppContext = createContext<AppContextProps | undefined>(undefined);
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const [user, setUser] = useState<User>();
+  const [trigger, setTrigger] = useState<boolean>(false);
   useEffect(() => {
     const getUser = async () => {
       const Userid = await getUserIdByMail(session?.user?.email as string);
@@ -20,9 +21,9 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
     if (session) {
       getUser();
     }
-  }, [session]);
+  }, [session, trigger]);
   return (
-    <AppContext.Provider value={{ user, setUser, status }}>
+    <AppContext.Provider value={{ user, setUser, status, setTrigger }}>
       {children}
     </AppContext.Provider>
   );

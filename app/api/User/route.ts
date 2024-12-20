@@ -22,3 +22,20 @@ export async function GET(
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+    await User.findOneAndUpdate({ _id: data.id }, { liked: data.liked });
+    return NextResponse.json(
+      { message: "Successfully Updated user" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Failed to perform operation", error);
+    return NextResponse.json(
+      { message: "Failed to perform operation" },
+      { status: 500 }
+    );
+  }
+}
