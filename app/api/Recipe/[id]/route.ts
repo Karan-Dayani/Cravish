@@ -6,8 +6,9 @@ export async function GET(
   _req: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse<recipeType | error>> {
+  const { id } = await params;
   try {
-    const response = await Recipe.findById(params.id);
+    const response = await Recipe.findById(id);
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error }, { status: 500 });
