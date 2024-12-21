@@ -119,12 +119,16 @@ export const getUserById = async (id: string): Promise<User> => {
 };
 
 export const getShuffeledRecipe = async (
-  size: number
-): Promise<Recipe[] | null> => {
+  skip: number,
+  limit: number
+): Promise<Response> => {
   try {
-    const res = await fetch(`${baseUrl}/api/Recipe?size=${size}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${baseUrl}/api/Recipe?skip=${skip}&limit=${limit}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     if (!res.ok) {
       throw new Error(
@@ -132,10 +136,10 @@ export const getShuffeledRecipe = async (
       );
     }
 
-    return await res.json();
+    return res;
   } catch (error) {
     console.error("Failed to get Recipes", error);
-    return null;
+    throw error;
   }
 };
 

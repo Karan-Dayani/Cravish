@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getUserById } from "./api/api";
+import { getShuffeledRecipe, getUserById } from "./api/api";
 import { Recipe, User } from "./interfaces";
 import { LuHeart } from "react-icons/lu";
 import Link from "next/link";
@@ -72,23 +72,19 @@ function ResultItem({ item }: { item: Recipe }) {
 
 export default function Home() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [skip, setSkip] = useState<number>(0);
+  const limit = 15;
 
-  const fetchRecipes = async (page: number) => {
+  const fetchRecipes = async (skip: number) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/Recipe?page=${page}&limit=10`);
+      const res = await getShuffeledRecipe(skip, limit);
       if (!res.ok) throw new Error("Failed to fetch recipes");
 
       const data = await res.json();
 
-      if (data.length === 0) {
-        setHasMore(false);
-      } else {
-        setRecipes((prevRecipes) => [...prevRecipes, ...data]);
-      }
+      setRecipes((prevRecipes) => [...prevRecipes, ...data]);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
@@ -97,18 +93,16 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchRecipes(page);
-  }, [page]);
+    fetchRecipes(skip);
+  }, [skip]);
 
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 200 &&
-        !loading &&
-        hasMore
+        document.documentElement.offsetHeight - 200
       ) {
-        setPage((prevPage) => prevPage + 1);
+        setSkip(recipes.length);
       }
     };
 
@@ -116,7 +110,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [loading, hasMore]);
+  }, [recipes]);
 
   return (
     <div className="py-2">
@@ -135,7 +129,7 @@ export default function Home() {
           ></div>
         </div>
       )}
-      {!hasMore && <p className="text-center mt-4">No more recipes to load.</p>}
+      {/* {!hasMore && <p className="text-center mt-4">No more recipes to load.</p>} */}
     </div>
   );
 }

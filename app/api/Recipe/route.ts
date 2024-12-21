@@ -36,16 +36,9 @@ export async function GET(
 ): Promise<NextResponse<recipeType[] | error>> {
   const { searchParams } = new URL(req.url);
   const search = searchParams.get("search");
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const skip = parseInt(searchParams.get("skip") || "0");
+  const limit = parseInt(searchParams.get("limit") || "15");
   const userId = searchParams.get("userId");
-
-  if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
-    return NextResponse.json(
-      { message: "Invalid pagination parameters" },
-      { status: 400 }
-    );
-  }
 
   try {
     let response;
@@ -57,7 +50,13 @@ export async function GET(
     } else if (userId) {
       response = await Recipe.find({ userId: userId });
     } else {
-      response = await Recipe.aggregate([{ $sample: { size: limit } }]);
+      response = await Recipe.find(
+        {},
+        { userId: 1, title: 1, img: 1, likes: 1 }
+      )
+        .sort({ likes: -1, createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
     }
 
     return NextResponse.json(response, { status: 200 });
